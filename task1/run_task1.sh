@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Task 1: Automated batch loading of consumption data using Phase 1 MapReduce approach
+# Task 1: Automated batch loading of consumption data from spool directory to HDFS
+
+# Create spool directory and copy consumption files there
+mkdir -p /home/hadoopuser/spooldir
+cp ../../data/Final\ Dataset/consumption_*.txt /home/hadoopuser/spooldir/
 
 # Compile the job
-javac -classpath $(hadoop classpath) DataLoaderTask1.java
-jar cf dataloader.jar DataLoaderTask1*.class
+javac -classpath $(hadoop classpath) -d . *.java
+jar cf phase2-task1.jar projPhase1/*.class
 
-# Upload consumption data to HDFS
-hdfs dfs -mkdir -p /input/data
-hdfs dfs -put data/Final\ Dataset/consumption_*.txt /input/data/
+# Run the MapReduce job (reads from spool directory)
+hadoop jar phase2-task1.jar projPhase1.ReduceJob /home/hadoopuser/spooldir hdfs://192.168.56.5:9820/phase2
 
-# Run the MapReduce job (automated batch process)
-hadoop jar dataloader.jar DataLoaderTask1 /input/data /outputProject1
-
-echo "Task 1: Consumption data loaded to Phase 1 structure in /outputProject1"
+echo "Task 1: Consumption data loaded from spool directory to Phase 1 structure in HDFS"
