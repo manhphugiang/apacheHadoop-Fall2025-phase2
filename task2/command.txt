@@ -1,0 +1,6 @@
+//write the config file
+sudo nano $FLUME_HOME/conf/flume_phase2.conf
+
+
+//run the agent then add new consumption file into /home/hadoopuser/flume/spooldir or any directory you config the flume agent to look into
+flume-ng agent  --conf-file $FLUME_HOME/conf/task2-streaming.conf   --name agent1   --conf $FLUME_HOME/conf   -Dflume.root.logger=INFO,console
