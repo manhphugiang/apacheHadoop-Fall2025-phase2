@@ -2,18 +2,20 @@
 
 # Task 1: Automated batch loading of consumption data from spool directory to HDFS
 
-# Create spool directory and copy consumption files there
-mkdir -p /home/hadoopuser/spooldir
-cp ../../data/Final\ Dataset/consumption_*.txt /home/hadoopuser/spooldir/
+# create spool directory and move initial file into first so that hadoop have data to process as a batch
+# mkdir -p /home/hadoopuser/flume/spooldir
 
-# Compile the job
-javac -classpath $(hadoop classpath) -d . *.java
-jar cf phase2-task1.jar projPhase1/*.class
 
-# Run the MapReduce job (reads from spool directory)
-hadoop jar phase2-task1.jar projPhase1.ReduceJob file:///home/hadoopuser/spooldir hdfs://192.168.56.5:9820/phase2
+# make sure to build the artifact first
 
-# Mark files as completed for Flume (rename to .COMPLETED)
+# run the commnad MapReduce job (reads from spool directory) 
+hadoop jar home/hadoop-user/phase2-task1.jar file:///home/hadoopuser/flume/spooldir hdfs://192.168.56.5:9820/projectPhase2 
+# your jar file location can be different
+# your output can be different
+# your initial file path can be different
+
+
+# mark files as completed for Flume (rename to .COMPLETED) so that flume do not pick up the files that already been written to hdfs by Hadoop
 for file in /home/hadoopuser/spooldir/consumption_*.txt; do
     if [ -f "$file" ]; then
         mv "$file" "$file.COMPLETED"
